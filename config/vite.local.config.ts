@@ -4,6 +4,7 @@
 import { defineConfig } from "vite";
 import { fromPairs, has, merge, reverse, toPairs } from "lodash";
 import viteDevConfig from "./vite.dev.config";
+import viteBaseConfig from "../vite.config";
 console.log("local:开发环境");
 
 const viteLocalConfig = defineConfig({
@@ -14,9 +15,9 @@ const viteLocalConfig = defineConfig({
   },
 });
 
-const mergedConfig = (() => {
-  return merge({}, viteDevConfig, viteLocalConfig);
-})();
+// const mergedConfig: any = () => {
+//   return;
+// };
 
 /**
  * 开发服务器中 proxy 代理需要额外处理
@@ -24,9 +25,11 @@ const mergedConfig = (() => {
  */
 
 // 对于proxy，覆盖的可能需要排在前面，这里作特殊处理
-if (has(mergedConfig, "server.proxy")) {
-  const _tempArr = toPairs(mergedConfig?.["server"]?.["proxy"]);
-  mergedConfig["server"]["proxy"] = fromPairs(reverse(_tempArr));
-}
+// if (has(mergedConfig, "server.proxy")) {
+//   const _tempArr = toPairs(mergedConfig?.["server"]?.["proxy"]);
+//   mergedConfig["server"]["proxy"] = fromPairs(reverse(_tempArr));
+// }
 
-export default mergedConfig;
+console.log(merge(viteDevConfig, viteLocalConfig));
+
+export default merge(viteDevConfig, viteLocalConfig);

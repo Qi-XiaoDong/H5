@@ -21,7 +21,9 @@
 3. postcss.config.js 配置中 module.exports 报红
 
 ```text
-修改文件名为.ts后缀
+1. 修改文件名为.ts后缀
+
+2. 修改为.ts后缀后ts没有进行编译该文件导致项目报错
 ```
 
 ###
@@ -55,3 +57,21 @@ const env = loadEnv(mode, path.resolve(__dirname, "./env"), "");
 
 2. config 文件中`vite.local.config.ts`ts 报错
    ![](public\Snipaste_2023-02-14_14-01-52.png)
+
+   ```
+      暂未解决优化
+   ```
+
+3. 指定 vite 配置文件后 vue 编译时报错
+   ![](public\Snipaste_2023-02-14_15-44-15.png)
+
+   ```js
+   //合并配置文件时丢失了base配置
+   console.log(merge({}, viteDevConfig, viteLocalConfig));
+   //正确形式
+   console.log(merge(viteDevConfig, viteLocalConfig));
+
+   // 编辑器报错
+   卸载在Vetur;
+   下载Volar;
+   ```

@@ -16,4 +16,6 @@ const viteDevConfig = defineConfig({
   },
 });
 
+console.log(merge(viteBaseConfig, viteDevConfig));
+
 export default merge(viteBaseConfig, viteDevConfig);
