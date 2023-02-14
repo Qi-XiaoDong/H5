@@ -2,14 +2,13 @@
  * 生产环境vite配置
  */
 import { defineConfig } from "vite";
-import { fromPairs, has, merge, reverse, toPairs } from "lodash";
+import { merge } from "lodash";
 import viteDevConfig from "./vite.dev.config";
-import viteBaseConfig from "../vite.config";
 console.log("local:开发环境");
 
 const viteLocalConfig = defineConfig({
   server: {
-    host: true,
+    host: false,
     port: 5011,
     proxy: {},
   },
@@ -30,6 +29,6 @@ const viteLocalConfig = defineConfig({
 //   mergedConfig["server"]["proxy"] = fromPairs(reverse(_tempArr));
 // }
 
-console.log(merge(viteDevConfig, viteLocalConfig));
+console.log(merge({ a: 1 }, viteDevConfig, viteLocalConfig));
 
-export default merge(viteDevConfig, viteLocalConfig);
+export default merge({}, viteDevConfig, viteLocalConfig);
