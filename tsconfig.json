@@ -1,0 +1,31 @@
+{
+  "target": "ESNext",
+  "lib": [
+    "DOM",
+    "DOM.Iterable",
+    "ESNext"
+  ],
+  "extends": "@vue/tsconfig/tsconfig.web.json",
+  "include": [
+    "env.d.ts",
+    "src/**/*",
+    "src/**/*.vue",
+    "config/**/*"
+  ],
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/*": [
+        "./src/*"
+      ]
+    }
+  },
+  "module": "esnext",
+  "moduleResolution": "node",
+  "noEmit": true,
+  "types": [
+    "vite/client",
+    "node",
+    "lodash"
+  ],
+}
