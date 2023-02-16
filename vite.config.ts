@@ -28,18 +28,18 @@ import { AntDesignVueResolver } from "unplugin-vue-components/resolvers";
 // });
 
 export default defineConfig({
-  plugins: [
-    vue(),
-    vueJsx(),
-    Components({
-      resolvers: [AntDesignVueResolver()],
-    }),
-  ],
-  resolve: {
-    alias: {
-      "@": fileURLToPath(new URL("./src", import.meta.url)),
-      "@@/types": fileURLToPath(new URL("./src/@types", import.meta.url)),
+    plugins: [
+        vue(),
+        vueJsx(),
+        // Components({
+        //     resolvers: [AntDesignVueResolver()],
+        // }),
+    ],
+    resolve: {
+        alias: {
+            "@": fileURLToPath(new URL("./src", import.meta.url)),
+            "@@/types": fileURLToPath(new URL("./src/@types", import.meta.url)),
+        },
     },
-  },
-  envDir: fileURLToPath(new URL("./env", import.meta.url)),
+    envDir: fileURLToPath(new URL("./env", import.meta.url)),
 });

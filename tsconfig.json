@@ -1,34 +1,35 @@
 {
-  "target": "ESNext",
-  "lib": [
-    "DOM",
-    "DOM.Iterable",
-    "ESNext"
-  ],
-  "extends": "@vue/tsconfig/tsconfig.web.json",
-  "include": [
-    "env.d.ts",
-    "src/**/*",
-    "src/**/*.vue",
-    "config/**/*"
-  ],
-  "compilerOptions": {
-    "baseUrl": ".",
-    "paths": {
-      "@/*": [
-        "./src/*"
-      ],
-      "@@types/*": [
-        "src/@types/*"
-      ],
-    }
-  },
-  "module": "esnext",
-  "moduleResolution": "node",
-  "noEmit": true,
-  "types": [
-    "vite/client",
-    "node",
-    "lodash"
-  ],
+    "target": "ESNext",
+    "lib": [
+        "DOM",
+        "DOM.Iterable",
+        "ESNext"
+    ],
+    "extends": "@vue/tsconfig/tsconfig.web.json",
+    "include": [
+        "env.d.ts",
+        "src/**/*",
+        "src/**/*.vue",
+        "config/**/*"
+    ],
+    "compilerOptions": {
+        "baseUrl": ".",
+        "paths": {
+            "@/*": [
+                "./src/*"
+            ],
+            "@@types/*": [
+                "src/@types/*"
+            ],
+        }
+    },
+    "module": "esnext",
+    "moduleResolution": "node",
+    "noEmit": true,
+    "types": [
+        "vite/client",
+        "node",
+        "lodash"
+    ],
+
 }

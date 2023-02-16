@@ -1,13 +1,13 @@
 <template>
-  <RjPagination
-    :pageable="pageable"
-    :handle-current-change="handleCurrentChange"
-    v-bind:handle-size-change="handleSizeChange"
-  />
+    <RjPagination
+        :pageable="pageable"
+        @handleSizeChange="handleSizeChange"
+        @handleCurrentChange="handleCurrentChange"
+    />
 </template>
 
 <script setup lang="ts" name="RjPagination">
-import { reactive, watchEffect } from "vue";
+import { reactive } from "vue";
 import RjPagination from "./RjPagination.vue";
 
 /**
@@ -15,21 +15,17 @@ import RjPagination from "./RjPagination.vue";
  */
 const pageable = reactive({ pageNum: 2, pageSize: 10, total: 1000 });
 
-watchEffect(() => {
-  console.log(pageable.pageNum);
-});
-
 /**
  * 每页展示条数变化
  */
 const handleSizeChange = (current: number, pagesize: number) => {
-  pageable.pageSize = pagesize;
+    pageable.pageSize = pagesize;
 };
 
 /**
  * 页码发生变化
  */
 const handleCurrentChange = (currentPage: number, pageSize: number) => {
-  pageable.pageNum = currentPage;
+    pageable.pageNum = currentPage;
 };
 </script>

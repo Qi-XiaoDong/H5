@@ -8,17 +8,20 @@ export {}
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
     APagination: typeof import('ant-design-vue/es')['Pagination']
+    ATable: typeof import('ant-design-vue/es')['Table']
+    Grid: typeof import('./src/components/ProTable/components/Grid/Grid.vue')['default']
     HelloWorld: typeof import('./src/components/business/HelloWorld.vue')['default']
     IconCommunity: typeof import('./src/components/icons/IconCommunity.vue')['default']
     IconDocumentation: typeof import('./src/components/icons/IconDocumentation.vue')['default']
     IconEcosystem: typeof import('./src/components/icons/IconEcosystem.vue')['default']
     IconSupport: typeof import('./src/components/icons/IconSupport.vue')['default']
     IconTooling: typeof import('./src/components/icons/IconTooling.vue')['default']
-    Pagination: typeof import('./src/components/base/Pagination.vue')['default']
-    RjPagination: typeof import('./src/components/base/pagination/RjPagination.vue')['default']
+    ProTable: typeof import('./src/components/ProTable/ProTable.vue')['default']
+    ProTableTest: typeof import('./src/components/ProTable/ProTableTest.vue')['default']
+    RjPagination: typeof import('./src/components/ProTable/components/pagination/RjPagination.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
-    TextRjPagination: typeof import('./src/components/base/pagination/TextRjPagination.vue')['default']
+    TextRjPagination: typeof import('./src/components/ProTable/components/pagination/TextRjPagination.vue')['default']
     TheWelcome: typeof import('./src/components/business/TheWelcome.vue')['default']
     WelcomeItem: typeof import('./src/components/business/WelcomeItem.vue')['default']
   }

@@ -1,11 +1,15 @@
 <script setup lang="ts">
-import TextRjPagination from "./components/base/pagination/TextRjPagination.vue";
+import ProTableTest from "./components/ProTable/ProTableTest.vue";
+
+// import TextRjPagination from "./components/base/pagination/TextRjPagination.vue";
 </script>
 
 <template>
-  <TextRjPagination />
+    <!-- <TextRjPagination /> -->
 
-  <!-- <RouterView />  -->
+    <ProTableTest></ProTableTest>
+
+    <!-- <RouterView />  -->
 </template>
 
 <style scoped></style>
