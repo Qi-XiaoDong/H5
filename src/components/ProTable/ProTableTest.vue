@@ -1,13 +1,28 @@
 <template>
     <div :style="{ margin: '200px auto', width: 1000 + 'px' }">
         <ProTable
+            rowKey="id"
             ref="proTable"
             :columns="columns"
-            :dataSource="dataSource"
             :initParam="initParam"
             :dataCallback="dataCallback"
-            :pagination="true"
+            pagination
+            :dataSource="dataSource"
         >
+            <!-- 表格 header 左侧按钮 -->
+            <template #tableHeaderLf="scope">
+                <a-button type="primary" @click="addUser(scope)"
+                    ><template #icon><plus-circle-outlined /></template
+                    >拓展左侧按钮</a-button
+                >
+            </template>
+            <!-- 表格 header 右侧按钮 -->
+            <template #tableHeaderRi="scope">
+                <a-button type="primary" @click="addUser(scope)"
+                    ><template #icon><plus-circle-outlined /></template
+                    >新增</a-button
+                >
+            </template>
         </ProTable>
     </div>
 </template>
@@ -17,7 +32,7 @@
 import { reactive, ref } from "vue";
 import ProTable from "./ProTable.vue";
 import type { ColumnProps } from "./interface/index";
-
+import { PlusCircleOutlined } from "@ant-design/icons-vue";
 // 获取 ProTable 元素，调用其获取刷新数据方法（还能获取到当前查询参数，方便导出携带参数）
 const proTable = ref();
 
@@ -48,6 +63,7 @@ const getTableList = (params: any) => {
 
 const dataSource = [
     {
+        id: "12",
         userName: "qxd",
         gender: "男",
         user: {
@@ -157,5 +173,9 @@ const columns: ColumnProps[] = [
     },
     { dataIndex: "operation", title: "操作", fixed: "right", width: 330 },
 ];
+
+const addUser = (props: any) => {
+    console.log(props);
+};
 </script>
 <Style></Style>

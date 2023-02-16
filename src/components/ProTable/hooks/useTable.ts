@@ -66,6 +66,8 @@ export const useTable = (data: IUseTable) => {
      * @return void
      * */
     const getTableList = async () => {
+        console.log(1231231);
+
         try {
             // 先把初始化参数和分页参数放到总参数里面
             Object.assign(

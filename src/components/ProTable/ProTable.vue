@@ -1,101 +1,185 @@
 <template>
     <!-- 搜索区域 -->
     <!-- 表格内容 card -->
-    <!-- <div class="card table-main"> -->
-    <!-- 表格头部 操作按钮 -->
-    <!-- 表格主体 -->
-    <div>
-        <a-table
-            ref="tableRef"
-            v-bind="$attrs"
-            :data-source="tableData"
-            :border="border"
-            :columns="tableColumns"
-            :pagination="false"
-        >
-            <!-- 默认插槽 -->
-            <slot></slot>
-            <!-- 表格标题 -->
-            <template v-slot:title="currentPageData" v-if="!!slots.title">
-                <slot name="title" :currentPageData="currentPageData"> </slot>
-            </template>
-            <!-- 个性化单元格插槽 -->
-            <template
-                v-slot:headerCell="{ title, column }"
-                v-if="!!slots.headerCell"
-            >
-                <slot name="headerCell" :index="title" :column="column"> </slot>
-            </template>
-            <!-- 个性化单元格插槽 -->
-            <template
-                #bodyCell="{ text, record, index, column }"
-                v-if="!!slots.bodyCell"
-            >
-                <slot
-                    name="bodyCell"
-                    :index="index"
-                    :column="column"
-                    :text="text"
-                    :record="record"
+    <div class="card table-main">
+        <!-- 表格头部 操作按钮 -->
+        <div class="table-header">
+            <div class="header-button-lf">
+                <!-- 导入 -->
+                <r-button type="primary" @click="() => {}"
+                    ><template #icon><plus-circle-outlined /></template
+                    >导出</r-button
                 >
-                </slot>
-            </template>
-            <!-- 自定义筛选菜单 -->
-            <template
-                #customFilterDropdown="FilterDropdownProps"
-                v-if="!!slots.customFilterDropdown"
-            >
-                <slot
-                    name="customFilterDropdown"
-                    :FilterDropdownProps="FilterDropdownProps"
+                <!-- 导出 -->
+                <a-button type="primary" @click="() => {}"
+                    ><template #icon><plus-circle-outlined /></template
+                    >导入</a-button
                 >
-                </slot>
-            </template>
-            <!-- 自定义筛选图标 -->
-            <template
-                v-slot:customFilterIcon="{ filtered, column }"
-                v-if="!!slots.customFilterIcon"
-            >
                 <slot
-                    name="customFilterIcon"
-                    :filtered="filtered"
-                    :column="column"
-                >
-                </slot>
-            </template>
-
-            <!-- 额外的展开行 -->
-            <template
-                v-slot:expandedRowRender="{ record, index, indent, expanded }"
-                v-if="!!slots.expandedRowRender"
-            >
+                    name="tableHeaderLf"
+                    :selectedListIds="selectedListIds"
+                    :selectedList="selectedList"
+                    :isSelected="isSelected"
+                ></slot>
+            </div>
+            <div class="header-button-ri">
                 <slot
-                    name="expandedRowRender"
-                    :record="record"
-                    :index="index"
-                    :indent="indent"
-                    :expanded="expanded"
+                    name="tableHeaderRi"
+                    :selectedListIds="selectedListIds"
+                    :selectedList="selectedList"
+                    :isSelected="isSelected"
+                ></slot>
+                <!-- 刷新按钮 -->
+                <a-button
+                    shape="circle"
+                    @click="getTableList"
+                    v-if="toolButton.refresh"
                 >
-                </slot>
-            </template>
-            <!-- 表格尾部 -->
-            <template v-slot:footer="currentPageData" v-if="!!slots.footer">
-                <slot name="footer" :currentPageData="currentPageData"> </slot>
-            </template>
-            <!-- 表格无数据情况插槽 -->
-            <template #emptyText v-if="!!slots.emptyText">
-                <div class="table-empty">
-                    <slot name="emptyText">
-                        <div>暂无数据</div>
+                    <template #icon>
+                        <sync-outlined />
+                    </template>
+                </a-button>
+                <!--预留打印 -->
+                <a-button shape="circle" v-if="toolButton.printer">
+                    <template #icon>
+                        <printer-outlined />
+                    </template>
+                </a-button>
+                <!--表格行高调节按钮 -->
+                <a-dropdown>
+                    <template #overlay>
+                        <a-menu @click="handleChangeTableSize">
+                            <a-menu-item
+                                v-for="item in ProTableSize"
+                                :key="item.value"
+                                >{{ item.lable }}</a-menu-item
+                            >
+                        </a-menu>
+                    </template>
+                    <a-button shape="circle" v-if="toolButton.rowHeight">
+                        <template #icon>
+                            <column-height-outlined />
+                        </template>
+                    </a-button>
+                </a-dropdown>
+                <!-- 列设置 -->
+                <a-button shape="circle" v-if="toolButton.setColumn">
+                    <template #icon>
+                        <setting-outlined />
+                    </template>
+                </a-button>
+                <!--是否显示搜索区域操作 -->
+                <a-button shape="circle" v-if="toolButton.search">
+                    <template #icon>
+                        <search-outlined />
+                    </template>
+                </a-button>
+            </div>
+        </div>
+        <!-- 表格主体 -->
+        <div class="table-body">
+            <a-table
+                ref="tableRef"
+                v-bind="$attrs"
+                :bordered="bordered"
+                :columns="tableColumns"
+                :pagination="false"
+                :data-source="tableData"
+                :size="tableSizeRef"
+                :rowSelection="_rowSelection"
+            >
+                <!-- 默认插槽 -->
+                <slot></slot>
+                <!-- 表格标题 -->
+                <template v-slot:title="currentPageData" v-if="!!slots.title">
+                    <slot name="title" :currentPageData="currentPageData">
                     </slot>
-                </div>
-            </template>
-            <!-- 表格总结栏插槽 -->
-            <template #summary v-if="!!slots.summary">
-                <slot name="summary"> </slot>
-            </template>
-        </a-table>
-        <!-- 分页组件 -->
+                </template>
+                <!-- 个性化单元格插槽 -->
+                <template
+                    v-slot:headerCell="{ title, column }"
+                    v-if="!!slots.headerCell"
+                >
+                    <slot name="headerCell" :index="title" :column="column">
+                    </slot>
+                </template>
+                <!-- 个性化单元格插槽 -->
+                <template
+                    #bodyCell="{ text, record, index, column }"
+                    v-if="!!slots.bodyCell"
+                >
+                    <slot
+                        name="bodyCell"
+                        :index="index"
+                        :column="column"
+                        :text="text"
+                        :record="record"
+                    >
+                    </slot>
+                </template>
+                <!-- 自定义筛选菜单 -->
+                <template
+                    #customFilterDropdown="FilterDropdownProps"
+                    v-if="!!slots.customFilterDropdown"
+                >
+                    <slot
+                        name="customFilterDropdown"
+                        :FilterDropdownProps="FilterDropdownProps"
+                    >
+                    </slot>
+                </template>
+                <!-- 自定义筛选图标 -->
+                <template
+                    v-slot:customFilterIcon="{ filtered, column }"
+                    v-if="!!slots.customFilterIcon"
+                >
+                    <slot
+                        name="customFilterIcon"
+                        :filtered="filtered"
+                        :column="column"
+                    >
+                    </slot>
+                </template>
+
+                <!-- 额外的展开行 -->
+                <template
+                    v-slot:expandedRowRender="{
+                        record,
+                        index,
+                        indent,
+                        expanded,
+                    }"
+                    v-if="!!slots.expandedRowRender"
+                >
+                    <slot
+                        name="expandedRowRender"
+                        :record="record"
+                        :index="index"
+                        :indent="indent"
+                        :expanded="expanded"
+                    >
+                    </slot>
+                </template>
+                <!-- 表格尾部 -->
+                <template v-slot:footer="currentPageData" v-if="!!slots.footer">
+                    <slot name="footer" :currentPageData="currentPageData">
+                    </slot>
+                </template>
+                <!-- 表格无数据情况插槽 -->
+                <template #emptyText v-if="!!slots.emptyText">
+                    <div class="table-empty">
+                        <slot name="emptyText">
+                            <div>暂无数据</div>
+                        </slot>
+                    </div>
+                </template>
+                <!-- 表格总结栏插槽 -->
+                <template #summary v-if="!!slots.summary">
+                    <slot name="summary"> </slot>
+                </template>
+            </a-table>
+            <!-- 分页组件 -->
+        </div>
     </div>
     <!-- 列设置 -->
 </template>
@@ -108,11 +192,16 @@ export default {
 };
 </script>
 <script setup lang="ts">
-import { ref, watch, computed, provide, useSlots } from "vue";
-// import { useTable } from "@/hooks/useTable";
+import {
+    SyncOutlined,
+    SettingOutlined,
+    ColumnHeightOutlined,
+    PrinterOutlined,
+    SearchOutlined,
+    PlusCircleOutlined,
+} from "@ant-design/icons-vue";
+import { ref, watch, provide, useSlots, useAttrs } from "vue";
 // import { useSelection } from "@/hooks/useSelection";
-
-// import { Refresh, Printer, Operation, Search } from "@element-plus/icons-vue";
 import {
     filterEnum,
     formatValue,
@@ -129,24 +218,42 @@ import type { Table } from "ant-design-vue";
 import { useTable } from "@/components/ProTable/hooks/useTable";
 import type { BreakPoint } from "./components/Grid/interface/interface";
 import type { ColumnProps } from "./interface";
+import { ProTableSize } from "./constant";
+import { useSelection } from "./hooks/useSelection";
+import RButton from "@/components/base/RButton/RButton.vue";
+
+/**
+ * 继承的不会出现在props中(有类型提示)会通过透传给table组件
+ */
 interface ProTableProps
-    extends Partial<Omit<TableProps<any>, "data" | "title" | "pagination">> {
+    extends Partial<
+        Omit<TableProps<any>, "dataSource" | "pagination" | "columns">
+    > {
+    bordered?: boolean;
+    size?: TableProps["size"]; // 表格尺寸
     columns: ColumnProps[]; // 列配置项
     requestApi?: (params: any) => Promise<any>; // 请求表格数据的api ==> 非必传
     dataSource?: any[]; // 表格数据源
     dataCallback?: (data: any) => any; // 返回数据的回调函数，可以对数据进行处理 ==> 非必传
-    title?: string; // 表格标题，目前只在打印的时候用到 ==> 非必传
     pagination?: boolean; // 是否需要分页组件 ==> 非必传（默认为true）
     initParam?: any; // 初始化请求参数 ==> 非必传（默认为{}）
-    border?: boolean; // 是否带有纵向边框 ==> 非必传（默认为true）
-    toolButton?: boolean; // 是否显示表格功能按钮 ==> 非必传（默认为true）
-    selectId?: string; // 当表格数据多选时，所指定的 id ==> 非必传（默认为 id）
+    //TODO： 是否显示表格功能按钮 ==> 非必传(目前传递方式不优雅)
+    toolButton?: {
+        refresh?: boolean;
+        printer?: boolean;
+        rowHeight?: boolean;
+        setColumn?: boolean;
+        search?: boolean;
+    };
+    rowSelection?: TableProps["rowSelection"];
     searchCol?: number | Record<BreakPoint, number>; // 表格搜索项 每列占比配置 ==> 非必传 { xs: 1, sm: 2, md: 2, lg: 3, xl: 4 }
 }
 
+// 得到组件中的插槽
 const slots = useSlots();
 
-console.log(slots);
+// 透传到table的属性
+const attrs = useAttrs();
 
 // 接受父组件参数，配置默认值
 const props = withDefaults(defineProps<ProTableProps>(), {
@@ -154,22 +261,30 @@ const props = withDefaults(defineProps<ProTableProps>(), {
     pagination: false,
     initParam: {},
     border: false,
-    toolButton: true,
-    selectId: "id",
+    toolButton: () => ({
+        refresh: true,
+        printer: true,
+        rowHeight: true,
+        setColumn: true,
+        search: true,
+    }),
     searchCol: () => ({ xs: 1, sm: 2, md: 2, lg: 3, xl: 4 }),
 });
+
 // // 是否显示搜索模块
 // const isShowSearch = ref(true);
 // 表格 DOM 元素
 const tableRef = ref<InstanceType<typeof Table>>();
-// // 表格多选 Hooks
-// const {
-//     selectionChange,
-//     getRowKeys,
-//     selectedList,
-//     selectedListIds,
-//     isSelected,
-// } = useSelection(props.selectId);
+// 表格多选 Hooks
+const { selectionChange, selectedList, selectedListIds, isSelected } =
+    useSelection();
+
+const _rowSelection = props.rowSelection
+    ? undefined
+    : Object.assign({}, props.rowSelection, {
+          onChange: selectionChange,
+          preserveSelectedRowKeys: true,
+      });
 // 表格操作 Hooks
 const {
     tableData,
@@ -188,7 +303,14 @@ const {
     isPageable: props.pagination,
     dataCallBack: props.dataCallback,
 });
-console.log(tableData.value);
+
+/**
+ * 表格密度调整
+ */
+const tableSizeRef = ref<ProTableProps["size"]>(props.size);
+const handleChangeTableSize = (size: any) => {
+    tableSizeRef.value = size.key;
+};
 
 // 清空选中数据列表
 // const clearSelection = () => tableRef.value!.clearSelection();

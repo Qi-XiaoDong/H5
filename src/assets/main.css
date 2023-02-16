@@ -1,4 +1,5 @@
 @import "./base.css";
+@import "ant-design-vue/dist/antd.css";
 /* #app {
   max-width: 1280px;
   margin: 0 auto;
